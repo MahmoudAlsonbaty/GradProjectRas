@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class myDrawer extends StatelessWidget {
   int selectedIndex = 0;
@@ -7,6 +8,8 @@ class myDrawer extends StatelessWidget {
   // 2 -> Pending Orders
   // 3 -> New Order
 
+  final TextStyle drawerText =
+      GoogleFonts.roboto(fontSize: 19, fontWeight: FontWeight.bold);
   myDrawer({super.key, required this.selectedIndex});
 
   @override
@@ -26,7 +29,11 @@ class myDrawer extends StatelessWidget {
                       ? Color.fromRGBO(165, 212, 227, 1)
                       : Color.fromRGBO(217, 236, 242, 1),
                   child: ListTile(
-                    title: Center(child: Text("System Status")),
+                    title: Center(
+                        child: Text(
+                      "System Status",
+                      style: drawerText,
+                    )),
                     onTap: () {},
                   ),
                 ),
@@ -35,7 +42,11 @@ class myDrawer extends StatelessWidget {
                       ? Color.fromRGBO(165, 212, 227, 1)
                       : Color.fromRGBO(217, 236, 242, 1),
                   child: ListTile(
-                    title: Center(child: Text("Inventory")),
+                    title: Center(
+                        child: Text(
+                      "Inventory",
+                      style: drawerText,
+                    )),
                     onTap: () {},
                   ),
                 ),
@@ -44,7 +55,11 @@ class myDrawer extends StatelessWidget {
                       ? Color.fromRGBO(165, 212, 227, 1)
                       : Color.fromRGBO(217, 236, 242, 1),
                   child: ListTile(
-                    title: Center(child: Text("Pending Orders")),
+                    title: Center(
+                        child: Text(
+                      "Pending Orders",
+                      style: drawerText,
+                    )),
                     onTap: () {},
                   ),
                 ),
@@ -53,7 +68,11 @@ class myDrawer extends StatelessWidget {
                       ? Color.fromRGBO(165, 212, 227, 1)
                       : Color.fromRGBO(217, 236, 242, 1),
                   child: ListTile(
-                    title: Center(child: Text("New Order")),
+                    title: Center(
+                        child: Text(
+                      "New Order",
+                      style: drawerText,
+                    )),
                     onTap: () {},
                   ),
                 ),

@@ -4,6 +4,7 @@ import 'package:gradproject_management_system/Screens/Status_Screen.dart';
 import 'package:gradproject_management_system/blocs/inventory_bloc/inventory_bloc.dart';
 import 'package:gradproject_management_system/blocs/orders_bloc/orders_bloc.dart';
 import 'package:gradproject_management_system/blocs/serial_bloc/serial_bloc.dart';
+import 'package:gradproject_management_system/blocs/status_bloc/status_bloc.dart';
 
 void main() {
   runApp(const ManagementApp());
@@ -24,6 +25,10 @@ class ManagementApp extends StatelessWidget {
         ),
         BlocProvider<OrdersBloc>(
           create: (BuildContext context) => OrdersBloc(),
+        ),
+        BlocProvider<StatusBloc>(
+          create: (BuildContext context) =>
+              StatusBloc()..add(RefreshStatusPageEvent()),
         ),
       ],
       child: MaterialApp(
