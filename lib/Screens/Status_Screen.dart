@@ -12,16 +12,28 @@ class StatusScreen extends StatefulWidget {
 class _StatusScreenState extends State<StatusScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: Text(widget.title),
-        ),
-        body: Row(
-          children: [
-            // Drawer
-            myDrawer()
-          ],
-        ));
+    return Scaffold(body: LayoutBuilder(builder: (context, constraints) {
+      return Row(
+        children: [
+          // Drawer
+          Flexible(
+            flex: 1,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 270), // Logo Max Width
+              child: myDrawer(),
+            ),
+          ),
+          // Body
+          Expanded(
+            flex: 5,
+            child: Column(
+              children: [
+                Text("Status Screen"),
+              ],
+            ),
+          ),
+        ],
+      );
+    }));
   }
 }
