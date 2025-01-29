@@ -10,6 +10,8 @@ void main() {
   runApp(const ManagementApp());
 }
 
+//! WE HAVE 9*3 SHELVES
+
 class ManagementApp extends StatelessWidget {
   const ManagementApp({super.key});
 

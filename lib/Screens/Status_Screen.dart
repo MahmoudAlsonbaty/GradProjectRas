@@ -51,61 +51,209 @@ class _StatusScreenState extends State<StatusScreen> {
 }
 
 Widget statusScreenBody(StatusState state) {
-  if (state.runtimeType == StatusLoading) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 20,
-        ),
-        Text(
-          "System Status",
-          style: GoogleFonts.roboto(
-            fontSize: 42,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        SizedBox(
-          height: 60,
-        ),
-        LoadingAnimationWidget.beat(
+  return Column(
+    children: [
+      SizedBox(
+        height: 20,
+      ),
+      Text(
+        "System Status",
+        style: GoogleFonts.roboto(
+          fontSize: 50,
+          fontWeight: FontWeight.bold,
           color: Colors.white,
-          size: 60,
-        )
-      ],
-    );
-  } else if (state.runtimeType == StatusUpdated) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 20,
         ),
-        Text(
-          "System Status",
-          style: GoogleFonts.roboto(
-            fontSize: 42,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        SizedBox(
-          height: 60,
-        ),
-        BigStatusWidget(state as StatusUpdated),
-      ],
-    );
-  } else {
-    return Container(); // REMOVE THIS
-  }
-}
+      ),
+      SizedBox(
+        height: 60,
+      ),
+      //! PRINT THE CHECKING STATUS MESSAGE
+      () {
+        if ((state.runtimeType == StatusLoading) ||
+            (state.runtimeType == StatusUpdated &&
+                    ((state as StatusUpdated).robotStatus ==
+                        robotConnectionStatus.checking) ||
+                (state as StatusUpdated).networkStatus ==
+                    networkConnectionStatus.checking)) {
+          return Text(
+            "Checking Systems...",
+            style: GoogleFonts.roboto(
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+              color: Colors.yellow,
+            ),
+          );
+          //! SYSTEMS ARE CONNECTED
+        } else if ((state.runtimeType == StatusUpdated &&
+            ((state).robotStatus == robotConnectionStatus.connected) &&
+            (state).networkStatus == networkConnectionStatus.connected)) {
+          return Text(
+            "Done Checking System!",
+            style: GoogleFonts.roboto(
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          );
 
-Widget BigStatusWidget(StatusUpdated state) {
-  if (state.networkStatus == networkConnectionStatus.connected) {
-    return LoadingAnimationWidget.bouncingBall(color: Colors.white, size: 60);
-  } else {
-    return LoadingAnimationWidget.beat(
-      color: Colors.white,
-      size: 60,
-    );
-  }
+          //! ERROR IN THE STATUS
+        } else {
+          return Text(
+            "Something Went Wrong!",
+            style: GoogleFonts.roboto(
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
+            ),
+          );
+        }
+      }(),
+      SizedBox(
+        height: 20,
+      ),
+      //statusScreenBodyContent(state),
+      //! SHOW THE ANIMATION FOR STATUS
+      () {
+        //! LOADING STATUS
+        if ((state.runtimeType == StatusLoading) ||
+            (state.runtimeType == StatusUpdated &&
+                    ((state as StatusUpdated).robotStatus ==
+                        robotConnectionStatus.checking) ||
+                (state as StatusUpdated).networkStatus ==
+                    networkConnectionStatus.checking)) {
+          return LoadingAnimationWidget.beat(
+            color: Colors.white,
+            size: 60,
+          );
+          //! SYSTEMS ARE CONNECTED
+        } else if ((state.runtimeType == StatusUpdated &&
+            ((state).robotStatus == robotConnectionStatus.connected) &&
+            (state).networkStatus == networkConnectionStatus.connected)) {
+          return Icon(Icons.check_circle_outline,
+              color: Colors.green, size: 60);
+
+          //! ERROR IN THE STATUS
+        } else {
+          return Icon(Icons.error, color: Colors.red, size: 60);
+        }
+      }()
+
+      //! THE AVR STATUS
+      ,
+      SizedBox(
+        height: 90,
+      ),
+      () {
+        if (state.runtimeType == StatusUpdated) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Robot Status: ",
+                style: GoogleFonts.roboto(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              () {
+                if ((state as StatusUpdated).robotStatus ==
+                    robotConnectionStatus.connected) {
+                  return Icon(Icons.check_circle_outline,
+                      color: Colors.green, size: 30);
+                } else {
+                  return Icon(Icons.error, color: Colors.red, size: 30);
+                }
+              }()
+            ],
+          );
+        } else {
+          return Row();
+        }
+      }(),
+      SizedBox(
+        height: 5,
+      ),
+      () {
+        if (state.runtimeType == StatusUpdated) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Server Status: ",
+                style: GoogleFonts.roboto(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              () {
+                if ((state as StatusUpdated).networkStatus ==
+                    networkConnectionStatus.connected) {
+                  return Icon(Icons.check_circle_outline,
+                      color: Colors.green, size: 30);
+                } else {
+                  return Icon(Icons.error, color: Colors.red, size: 30);
+                }
+              }()
+            ],
+          );
+        } else {
+          return Row();
+        }
+      }()
+    ],
+  );
+//   if (state.runtimeType == StatusLoading) {
+//     return Column(
+//       children: [
+//         SizedBox(
+//           height: 20,
+//         ),
+//         StatusTitleWidget(),
+//         SizedBox(
+//           height: 60,
+//         ),
+//         Text(
+//           "Checking Systems...",
+//           style: GoogleFonts.roboto(
+//             fontSize: 30,
+//             fontWeight: FontWeight.bold,
+//             color: Colors.yellow,
+//           ),
+//         ),
+//         SizedBox(
+//           height: 20,
+//         ),
+
+//       ],
+//     );
+//   } else if (state.runtimeType == StatusUpdated) {
+//     return Column(
+//       children: [
+//         SizedBox(
+//           height: 20,
+//         ),
+//         StatusTitleWidget(),
+//         SizedBox(
+//           height: 60,
+//         ),
+//         BigStatusWidget(state as StatusUpdated),
+//       ],
+//     );
+//   } else {
+//     return Container(); // REMOVE THIS
+//   }
+// }
+
+// Widget BigStatusWidget(StatusUpdated state) {
+//   if (state.networkStatus == networkConnectionStatus.connected) {
+//     return LoadingAnimationWidget.bouncingBall(color: Colors.white, size: 60);
+//   } else {
+//     return LoadingAnimationWidget.beat(
+//       color: Colors.white,
+//       size: 60,
+//     );
+//   }
+// }
 }

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../blocs/status_bloc/status_bloc.dart';
 
 class myDrawer extends StatelessWidget {
   int selectedIndex = 0;
@@ -34,7 +37,9 @@ class myDrawer extends StatelessWidget {
                       "System Status",
                       style: drawerText,
                     )),
-                    onTap: () {},
+                    onTap: () {
+                      context.read<StatusBloc>().add(RefreshStatusPageEvent());
+                    },
                   ),
                 ),
                 Container(
