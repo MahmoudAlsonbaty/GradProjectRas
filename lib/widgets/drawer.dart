@@ -39,6 +39,8 @@ class myDrawer extends StatelessWidget {
                     )),
                     onTap: () {
                       context.read<StatusBloc>().add(RefreshStatusPageEvent());
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          "/Status/", (route) => false);
                     },
                   ),
                 ),
@@ -52,7 +54,10 @@ class myDrawer extends StatelessWidget {
                       "Inventory",
                       style: drawerText,
                     )),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          "/Inventory/", (route) => false);
+                    },
                   ),
                 ),
                 Container(
@@ -65,7 +70,10 @@ class myDrawer extends StatelessWidget {
                       "Pending Orders",
                       style: drawerText,
                     )),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          "/PendingOrders/", (route) => false);
+                    },
                   ),
                 ),
                 Container(

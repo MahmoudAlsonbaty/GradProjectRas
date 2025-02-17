@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gradproject_management_system/blocs/inventory_bloc/inventory_bloc.dart';
 import 'package:gradproject_management_system/blocs/status_bloc/status_bloc.dart';
 import 'package:gradproject_management_system/widgets/Drawer.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class StatusScreen extends StatefulWidget {
-  const StatusScreen({super.key, required this.title});
-  final String title;
+  const StatusScreen({super.key});
 
   @override
   State<StatusScreen> createState() => _StatusScreenState();
