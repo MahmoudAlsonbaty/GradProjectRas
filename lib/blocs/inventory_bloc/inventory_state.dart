@@ -6,23 +6,23 @@ sealed class InventoryState {
 }
 
 final class InventoryLoaded extends InventoryState {
-  final Map<int, int> robotShelfQuantity;
-  final Map<int, String> robotShelfMeds;
-  const InventoryLoaded(
-      {required this.robotShelfQuantity, required this.robotShelfMeds});
+  final List<inventoryItem> inventoryItems;
+  const InventoryLoaded({required this.inventoryItems});
 
   @override
   String toString() {
-    String toBePrinted = "";
+    return 'InventoryLoaded, inventoryItems: $inventoryItems}';
+  }
+}
 
-    toBePrinted += "Shelves(Medicine) : \n";
-    robotShelfMeds.forEach((key, value) =>
-        {toBePrinted += "Shelf No.${key + 1}($key) has ${value}\n"});
+final class InventorySearched extends InventoryState {
+  final List<inventoryItem> inventoryItems;
+  final String searchTerm;
+  const InventorySearched(
+      {required this.inventoryItems, required this.searchTerm});
 
-    toBePrinted += "Quantities(Inventory) : \n";
-    robotShelfQuantity.forEach((key, value) =>
-        {toBePrinted += "Shelf No.${key + 1}($key) has ${value}\n"});
-
-    return toBePrinted;
+  @override
+  String toString() {
+    return 'InventorySearched, inventoryItems: $inventoryItems}';
   }
 }

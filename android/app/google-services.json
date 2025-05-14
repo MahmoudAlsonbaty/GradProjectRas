@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "212507865461",
+    "project_id": "overcooked-graduation-project",
+    "storage_bucket": "overcooked-graduation-project.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:212507865461:android:94b2379c05df16a3c1633c",
+        "android_client_info": {
+          "package_name": "com.example.gradproject_management_system"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgIgc9iDunxKSA9w27Zqr5NU2PkX0UimQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

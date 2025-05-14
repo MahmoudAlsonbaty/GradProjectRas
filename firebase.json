@@ -1,0 +1,32 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "overcooked-graduation-project",
+          "appId": "1:212507865461:android:94b2379c05df16a3c1633c",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "overcooked-graduation-project",
+          "configurations": {
+            "android": "1:212507865461:android:94b2379c05df16a3c1633c",
+            "ios": "1:212507865461:ios:3360eec179c7effbc1633c",
+            "web": "1:212507865461:web:7638adf840b28e76c1633c"
+          }
+        }
+      }
+    }
+  },
+  "emulators": {
+    "dataconnect": {
+      "dataDir": "dataconnect/.dataconnect/pgliteData",
+      "port": "9398"
+    }
+  },
+  "dataconnect": {
+    "source": "dataconnect"
+  }
+}
