@@ -28,9 +28,31 @@ class _PrescriptionConfirmScreenState extends State<PrescriptionConfirmScreen> {
     if (items != null && items.trim().isNotEmpty) {
       // Split the string into words (by whitespace)
       List<String> itemWords = items.split(RegExp(r'\s+'));
+      bool wantToExit = false;
       for (var word in itemWords) {
         print('Item word: ' + word); // Replace with your logic
-        // You can add your processing logic here
+        if (wantToExit) {
+          break;
+        }
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('I Successfully Received Medicine:'),
+            content: Text(word + ", The full output was: " + items),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text('OK'),
+              ),
+              TextButton(
+                  onPressed: () {
+                    wantToExit = true;
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("Exit"))
+            ],
+          ),
+        );
       }
     }
   }
