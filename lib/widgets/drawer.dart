@@ -45,7 +45,7 @@ class myDrawer extends StatelessWidget {
                 statusTile(context),
                 inventoryTile(context),
                 pendingTile(context),
-                prescriptionTile(),
+                prescriptionTile(context),
                 SizedBox(
                   height: 300,
                 ),
@@ -60,7 +60,7 @@ class myDrawer extends StatelessWidget {
 
   Container settingsTile(BuildContext context) {
     return Container(
-      color: selectedIndex == 3 ? menuSelectedColor : menuUnselectedColor,
+      color: selectedIndex == 4 ? menuSelectedColor : menuUnselectedColor,
       child: ListTile(
         title: Row(
           children: [
@@ -86,7 +86,7 @@ class myDrawer extends StatelessWidget {
     );
   }
 
-  Container prescriptionTile() {
+  Container prescriptionTile(BuildContext context) {
     return Container(
       color: selectedIndex == 3 ? menuSelectedColor : menuUnselectedColor,
       child: ListTile(
@@ -106,7 +106,10 @@ class myDrawer extends StatelessWidget {
             ),
           ],
         ),
-        onTap: () {},
+        onTap: () {
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil("/NewPrescription/", (route) => false);
+        },
       ),
     );
   }

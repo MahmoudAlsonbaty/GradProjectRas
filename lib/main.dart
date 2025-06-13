@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gradproject_management_system/Screens/Inventory_Screen.dart';
 import 'package:gradproject_management_system/Screens/Pending_Orders_Screen.dart';
+import 'package:gradproject_management_system/Screens/Prescription_Confirm_Screen.dart';
+import 'package:gradproject_management_system/Screens/Prescription_Screen.dart';
 import 'package:gradproject_management_system/Screens/Status_Screen.dart';
 import 'package:gradproject_management_system/Screens/Settings_Screen.dart';
 import 'package:gradproject_management_system/blocs/inventory_bloc/inventory_bloc.dart';
@@ -21,7 +23,7 @@ Future<void> main() async {
   runApp(const ManagementApp());
 }
 
-//! WE HAVE 9*3 SHELVES
+//! WE HAVE 8*3 SHELVES
 
 class ManagementApp extends StatelessWidget {
   const ManagementApp({super.key});
@@ -64,6 +66,12 @@ class ManagementApp extends StatelessWidget {
             },
             "/Settings/": (context) {
               return const SettingsScreen();
+            },
+            "/NewPrescription/": (context) {
+              return const PrescriptionScreen();
+            },
+            "/PrescriptionConfirm/": (context) {
+              return const PrescriptionConfirmScreen();
             },
           },
         ),

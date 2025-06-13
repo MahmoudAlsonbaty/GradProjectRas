@@ -159,13 +159,15 @@ class inventoryItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right: 20.0),
+      padding: const EdgeInsets.only(
+        right: 40.0,
+      ),
       child: Container(
         decoration: BoxDecoration(
           color: hexToColor("2C5F9B"),
           borderRadius: BorderRadius.circular(25),
         ),
-        height: 150,
+        height: 145,
         child: Row(
           children: [
             Expanded(
@@ -195,7 +197,7 @@ class inventoryItemWidget extends StatelessWidget {
                         child: Text(
                           "${item.medication.name} (${item.medication.strength})",
                           style: GoogleFonts.openSans(
-                            fontSize: 40,
+                            fontSize: 32,
                             fontWeight: FontWeight.w700,
                             color: Colors.white,
                           ),
