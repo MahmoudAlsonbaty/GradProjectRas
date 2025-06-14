@@ -1,16 +1,17 @@
-part of 'orders_bloc.dart';
+// part of 'orders_bloc.dart';
 
-@immutable
-sealed class OrdersEvent {
-  const OrdersEvent();
-}
+// @immutable
+// sealed class OrdersEvent {
+//   const OrdersEvent();
+// }
 
-final class AddOrderEvent extends OrdersEvent {
-  final ORDER newOrder;
-  const AddOrderEvent({required this.newOrder});
-}
+// // Updated event names to avoid duplicate class errors
+// class OrdersAddOrderEvent extends OrdersEvent {
+//   final Order newOrder;
+//   const OrdersAddOrderEvent({required this.newOrder});
+// }
 
-final class DeleteOrderEvent extends OrdersEvent {
-  final int number;
-  const DeleteOrderEvent({required this.number});
-}
+// class OrdersDeleteOrderEvent extends OrdersEvent {
+//   final int index;
+//   const OrdersDeleteOrderEvent({required this.index});
+// }

@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:gradproject_management_system/Const/InventoryItem.dart';
 import 'package:gradproject_management_system/Utils/ColorConverter.dart';
 import 'package:gradproject_management_system/blocs/inventory_bloc/inventory_bloc.dart';
+import 'package:gradproject_management_system/blocs/serial_bloc/serial_bloc.dart';
 import 'package:gradproject_management_system/widgets/Drawer.dart';
 import 'package:gradproject_management_system/widgets/backgroundFade.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -25,6 +26,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
     // Dispatch FetchInventoryFromCloudEvent when the page is loaded
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<InventoryBloc>().add(FetchInventoryFromCloudEvent());
+      // Send 't' to SerialBloc when inventory screen loads
+      context.read<SerialBloc>().add(SendSerialMessage('t'));
     });
   }
 

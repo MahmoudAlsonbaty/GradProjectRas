@@ -1,11 +1,9 @@
-part of 'orders_bloc.dart';
+// part of 'orders_bloc.dart';
 
-@immutable
-sealed class OrdersState {
-  const OrdersState();
-}
+// @immutable
+// sealed class OrdersState {
+//   const OrdersState();
+// }
 
-final class OrdersUpdated extends OrdersState {
-  final List<ORDER> pendingOrders;
-  const OrdersUpdated({required this.pendingOrders});
-}
+// // Only one OrdersLoaded class should exist. Remove any duplicate from other files if present.
+// // If you want a different name, you can use OrdersPendingLoaded or similar.
