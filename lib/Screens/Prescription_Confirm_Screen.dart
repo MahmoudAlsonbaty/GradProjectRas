@@ -30,7 +30,9 @@ class _PrescriptionConfirmScreenState extends State<PrescriptionConfirmScreen> {
     if (!selectedMedications
         .any((i) => i.medication.name == item.medication.name)) {
       setState(() {
-        selectedMedications.add(item);
+        selectedMedications.add(item.copyWith(
+          quantity: 1, // Ensure quantity is at least 1
+        ));
       });
     }
   }
@@ -47,32 +49,23 @@ class _PrescriptionConfirmScreenState extends State<PrescriptionConfirmScreen> {
     final String? items = ModalRoute.of(context)!.settings.arguments as String?;
     if (items != null && items.trim().isNotEmpty) {
       // Split the string into words (by whitespace)
-      List<String> itemWords = items.split(RegExp(r'\s+'));
-      bool wantToExit = false;
-      for (var word in itemWords) {
-        print('Item word: ' + word); // Replace with your logic
-        if (wantToExit) {
-          break;
+      List<String> itemWords = items.split(RegExp(r'\\s+'));
+      final inventoryState = BlocProvider.of<InventoryBloc>(context).state;
+      if (inventoryState is InventoryLoaded) {
+        for (var name in itemWords) {
+          final matches = inventoryState.inventoryItems.where(
+            (item) => item.medication.name.toLowerCase() == name.toLowerCase(),
+          );
+          if (matches.isNotEmpty) {
+            final match = matches.first;
+            if (!selectedMedications
+                .any((i) => i.medication.name == match.medication.name)) {
+              setState(() {
+                selectedMedications.add(match);
+              });
+            }
+          }
         }
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text('I Successfully Received Medicine:'),
-            content: Text(word + ", The full output was: " + items),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: Text('OK'),
-              ),
-              TextButton(
-                  onPressed: () {
-                    wantToExit = true;
-                    Navigator.of(context).pop();
-                  },
-                  child: Text("Exit"))
-            ],
-          ),
-        );
       }
     }
   }
