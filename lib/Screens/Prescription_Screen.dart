@@ -164,7 +164,7 @@ Widget PrescriptionScreenBody(BuildContext context, InventoryState state) {
                 onTap: () async {
                   print('Scan Prescription button tapped');
                   final result = await Process.run(
-                      'python3', ['assets/prescriptionScanScript.py']);
+                      'python3', ['/home/pharma/Desktop/prescriptionScanScript.py']);
                   String output = result.stdout.toString().trim();
                   if (output.isEmpty) {
                     showDialog(
