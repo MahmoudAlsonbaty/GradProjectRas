@@ -1,3 +1,5 @@
+import 'dart:developer' as developer;
+
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -47,12 +49,15 @@ class _PrescriptionConfirmScreenState extends State<PrescriptionConfirmScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     final String? items = ModalRoute.of(context)!.settings.arguments as String?;
+    developer.log('Screen Recieved : $items',
+        name: 'Prescription Confirmation');
     if (items != null && items.trim().isNotEmpty) {
-      // Split the string into words (by whitespace)
-      List<String> itemWords = items.split(RegExp(r'\\s+'));
+      // Split the string into words (by whitespace or newline)
+      List<String> itemWords = items.split(RegExp(r'[\s\n]+'));
       final inventoryState = BlocProvider.of<InventoryBloc>(context).state;
       if (inventoryState is InventoryLoaded) {
         for (var name in itemWords) {
+          developer.log('ITEMS: $name', name: 'Prescription Confirmation');
           final matches = inventoryState.inventoryItems.where(
             (item) => item.medication.name.toLowerCase() == name.toLowerCase(),
           );

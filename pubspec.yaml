@@ -46,6 +46,8 @@ dependencies:
   loader_overlay: ^5.0.0
   supabase_flutter: ^2.9.0
   shared_preferences: ^2.5.3
+  glossy: ^0.0.5
+  dropdown_button2: ^2.3.9
 
 dev_dependencies:
   flutter_test:

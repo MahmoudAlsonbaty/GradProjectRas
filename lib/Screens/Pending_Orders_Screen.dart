@@ -112,47 +112,30 @@ Widget PendingOrdersScreenBody(
             },
           ),
         ),
+        // Add the dark transparent container with centered text above the buttons
+        Container(
+          width: double.infinity,
+          height: 100,
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.6),
+          ),
+          alignment: Alignment.center,
+          margin: const EdgeInsets.only(bottom: 16),
+          child: Text(
+            'TOTAL PRICE: ${order.items.fold(0, (sum, item) => sum + (item.medication.price * item.quantity)).toStringAsFixed(2)} EGP',
+            style: GoogleFonts.montserrat(
+              fontSize: 28,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              ElevatedButton(
-                onPressed: () {
-                  // Build order string in format SSxQQ,SSxQQ
-                  final orderObj = state.pendingOrders[selectedOrderIndex];
-                  String order = orderObj.items.map((item) {
-                    String shelf = item.shelfNo.toString().padLeft(2, '0');
-                    String qty = '01';
-                    return '$shelf' 'x' '$qty';
-                  }).join(',');
-                  // You can now use the 'order' string for serial communication
-                  print('GRAB' + order);
-                  // Send the order string via serial
-                  context.read<SerialBloc>().add(SendSerialMessage(order));
-
-                  context
-                      .read<OrdersBloc>()
-                      .add(DeleteOrderEvent(index: selectedOrderIndex));
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Order confirmed!')),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Text(
-                  'Confirm',
-                  style:
-                      GoogleFonts.montserrat(fontSize: 20, color: Colors.white),
-                ),
-              ),
-              SizedBox(width: 20),
               ElevatedButton(
                 onPressed: () {
                   // Delete logic: remove order from pending orders
@@ -173,6 +156,25 @@ Widget PendingOrdersScreenBody(
                 ),
                 child: Text(
                   'Delete',
+                  style:
+                      GoogleFonts.montserrat(fontSize: 20, color: Colors.white),
+                ),
+              ),
+              // Spacer to push Confirm button to the right
+              ElevatedButton(
+                onPressed: () {
+                  SendOrderToRobot(state, context, selectedOrderIndex);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Text(
+                  'Confirm',
                   style:
                       GoogleFonts.montserrat(fontSize: 20, color: Colors.white),
                 ),
@@ -431,4 +433,24 @@ class inventoryItemWidget extends StatelessWidget {
       ),
     );
   }
+}
+
+void SendOrderToRobot(
+    OrdersLoaded state, BuildContext context, int selectedOrderIndex) {
+  // Build order string in format GRABSSxQQ,SSxQQ
+  final orderObj = state.pendingOrders[selectedOrderIndex];
+  String order = orderObj.items.map((item) {
+    String shelf = item.shelfNo.toString().padLeft(2, '0');
+    String qty = '01';
+    return '$shelf' 'x' '$qty';
+  }).join(',');
+  // You can now use the 'order' string for serial communication
+  order = "GRAB" + order;
+  print(order);
+  // Send the order string via serial
+  context.read<SerialBloc>().add(SendSerialMessage(order));
+  context.read<OrdersBloc>().add(DeleteOrderEvent(index: selectedOrderIndex));
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text('Order confirmed!')),
+  );
 }

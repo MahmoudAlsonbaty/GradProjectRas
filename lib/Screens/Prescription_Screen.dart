@@ -1,3 +1,4 @@
+import 'dart:developer' as developer;
 import 'dart:io';
 
 import 'package:dropdown_search/dropdown_search.dart';
@@ -162,10 +163,18 @@ Widget PrescriptionScreenBody(BuildContext context, InventoryState state) {
               // Scan Prescription Button
               GestureDetector(
                 onTap: () async {
+                  // Navigator.of(context).pushNamedAndRemoveUntil(
+                  //   "/PrescriptionConfirm/",
+                  //   (route) => false,
+                  //   arguments: """DEBUG: Picamera2 object created.
+                  //      Milga""",
+                  // );
                   print('Scan Prescription button tapped');
-                  final result = await Process.run(
-                      'python3', ['/home/pharma/Desktop/prescriptionScanScript.py']);
+                  final result = await Process.run('python3',
+                      ['/home/pharma/Desktop/prescriptionScanScript.py']);
                   String output = result.stdout.toString().trim();
+                  developer.log('Output Recieved from Script: $output',
+                      name: 'Prescription Script');
                   if (output.isEmpty) {
                     showDialog(
                       context: context,
@@ -184,7 +193,7 @@ Widget PrescriptionScreenBody(BuildContext context, InventoryState state) {
                     Navigator.of(context).pushNamedAndRemoveUntil(
                       "/PrescriptionConfirm/",
                       (route) => false,
-                      arguments: "test more and more",
+                      arguments: output,
                     );
                   }
                 },
