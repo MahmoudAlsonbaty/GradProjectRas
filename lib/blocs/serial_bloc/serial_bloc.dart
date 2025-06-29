@@ -8,10 +8,14 @@ part 'serial_state.dart';
 
 class SerialBloc extends Bloc<SerialEvent, SerialState> {
   Serial? _serial;
-  String selectedPort = '/dev/ttyACM0';
+  String selectedPort = '/dev/ttyUSB0';
   Baudrate selectedBaudRate = Baudrate.b9600;
   List<String> availablePorts = [
-    '/dev/ttyACM0',
+    '/dev/ttyUSB0',
+    '/dev/ttyUSB1',
+    '/dev/ttyUSB2',
+    '/dev/ttyUSB3',
+        '/dev/ttyACM0',
     '/dev/ttyACM1',
     '/dev/ttyACM2',
     '/dev/ttyACM3',
@@ -124,9 +128,11 @@ class SerialBloc extends Bloc<SerialEvent, SerialState> {
       // You may want to make the port and baudrate configurable
       _serial = Serial(port, baudRate);
       developer.log('Serial port connected', name: 'SerialBloc');
+      await Future.delayed(Duration(seconds: 1));
       _serial?.writeString('HANDSHAKE\n');
       developer.log('Sent HANDSHAKE message', name: 'SerialBloc');
       // Read response after handshake
+      await Future.delayed(Duration(seconds: 2));
       final response = _serial?.read(128, 2000); // 128 bytes, 2s timeout
       developer.log('Received from serial: \\${response}', name: 'SerialBloc');
       logs = logs + response!.toString();
@@ -134,6 +140,7 @@ class SerialBloc extends Bloc<SerialEvent, SerialState> {
       if (response.toString().toUpperCase().contains('HANDSHAKE')) {
         developer.log('Handshake successful, sending CALIBRATE',
             name: 'SerialBloc');
+      await Future.delayed(Duration(seconds: 3));
         _serial?.writeString('CALIBRATE\n');
         developer.log('Sent CALIBRATE message', name: 'SerialBloc');
         // Wait for response after CALIBRATE
