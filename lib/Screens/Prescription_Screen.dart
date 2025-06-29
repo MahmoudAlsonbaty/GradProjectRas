@@ -10,6 +10,7 @@ import 'package:gradproject_management_system/Utils/ColorConverter.dart';
 import 'package:gradproject_management_system/blocs/inventory_bloc/inventory_bloc.dart';
 import 'package:gradproject_management_system/widgets/Drawer.dart';
 import 'package:gradproject_management_system/widgets/backgroundFade.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class PrescriptionScreen extends StatefulWidget {
@@ -170,11 +171,13 @@ Widget PrescriptionScreenBody(BuildContext context, InventoryState state) {
                   //      Milga""",
                   // );
                   print('Scan Prescription button tapped');
+                  context.loaderOverlay.show();
                   final result = await Process.run('python3',
                       ['/home/pharma/Desktop/prescriptionScanScript.py']);
                   String output = result.stdout.toString().trim();
                   developer.log('Output Recieved from Script: $output',
                       name: 'Prescription Script');
+                  context.loaderOverlay.hide();
                   if (output.isEmpty) {
                     showDialog(
                       context: context,

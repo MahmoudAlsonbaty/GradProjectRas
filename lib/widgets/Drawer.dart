@@ -42,7 +42,7 @@ class myDrawer extends StatelessWidget {
                 SizedBox(
                   height: 50,
                 ),
-                statusTile(context),
+                // statusTile(context),
                 inventoryTile(context),
                 pendingTile(context),
                 prescriptionTile(context),
