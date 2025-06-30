@@ -6,6 +6,7 @@ import 'package:gradproject_management_system/Screens/Prescription_Confirm_Scree
 import 'package:gradproject_management_system/Screens/Prescription_Screen.dart';
 import 'package:gradproject_management_system/Screens/Status_Screen.dart';
 import 'package:gradproject_management_system/Screens/Settings_Screen.dart';
+import 'package:gradproject_management_system/blocs/interaction_bloc/interaction_bloc.dart';
 import 'package:gradproject_management_system/blocs/inventory_bloc/inventory_bloc.dart';
 import 'package:gradproject_management_system/blocs/orders_bloc/orders_bloc.dart';
 import 'package:gradproject_management_system/blocs/serial_bloc/serial_bloc.dart';
@@ -44,6 +45,11 @@ class ManagementApp extends StatelessWidget {
         BlocProvider<StatusBloc>(
           create: (BuildContext context) =>
               StatusBloc()..add(RefreshStatusPageEvent()),
+        ),
+        BlocProvider<InteractionBloc>(
+          create: (BuildContext context) =>
+              InteractionBloc()..add(FetchInteractionList()),
+          lazy: false,
         ),
       ],
       child: GlobalLoaderOverlay(

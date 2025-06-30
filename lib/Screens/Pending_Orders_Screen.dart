@@ -1,10 +1,14 @@
+import 'dart:developer' as developer;
+
 import 'package:dart_periphery/dart_periphery.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gradproject_management_system/Const/InteractionItem.dart';
 import 'package:gradproject_management_system/Const/InventoryItem.dart';
 import 'package:gradproject_management_system/Utils/ColorConverter.dart';
+import 'package:gradproject_management_system/blocs/interaction_bloc/interaction_bloc.dart';
 import 'package:gradproject_management_system/blocs/inventory_bloc/inventory_bloc.dart';
 import 'package:gradproject_management_system/blocs/orders_bloc/orders_bloc.dart';
 import 'package:gradproject_management_system/blocs/serial_bloc/serial_bloc.dart';
@@ -64,10 +68,14 @@ class _PendingOrdersScreenState extends State<PendingOrdersScreen> {
                     child: Menu(
                       state: state,
                       selectedIndex: selectedOrderIndex,
-                      onOrderTap: (idx) {
+                      onOrderTap: (idx) async {
                         setState(() {
                           selectedOrderIndex = idx;
                         });
+                        if (state is OrdersLoaded) {
+                          final order = state.pendingOrders[idx];
+                          await checkDrugInteraction(context, order, idx);
+                        }
                       },
                     ),
                   ),
@@ -90,6 +98,168 @@ class _PendingOrdersScreenState extends State<PendingOrdersScreen> {
       ),
     );
   }
+}
+
+checkDrugInteraction(BuildContext context, Order order, int indx) async {
+  developer.log("Starting Check Drug interaction", name: 'Interaction Checker');
+  InteractionState state = context.read<InteractionBloc>().state;
+  List<drugInteraction> drugInteractions = [];
+  if (state is InteractionLoaded) {
+    drugInteractions = state.interactionItems;
+  } else {
+    developer.log("can't check interaction as it's not loaded",
+        name: 'Interaction Checker');
+    return;
+  }
+  List<inventoryItem> items = order.items;
+  drugInteraction? foundInteraction = checkOrder(drugInteractions, items);
+
+  if (foundInteraction != null) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.yellow.shade100,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        titlePadding: EdgeInsets.fromLTRB(24, 24, 24, 0),
+        contentPadding: EdgeInsets.fromLTRB(24, 16, 24, 0),
+        actionsPadding: EdgeInsets.all(16),
+        content: ConstrainedBox(
+          constraints: BoxConstraints(minWidth: 500),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Divider(color: Colors.orange.shade300, thickness: 2),
+              SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.medication, color: Colors.black54),
+                  SizedBox(width: 8),
+                  Text(
+                    '${foundInteraction.medication1.name}  ×  ${foundInteraction.medication2.name}',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  SizedBox(width: 8),
+                  Icon(Icons.medication, color: Colors.black54),
+                ],
+              ),
+              SizedBox(height: 20),
+              Row(
+                children: [
+                  Icon(Icons.notes, color: Colors.orange.shade800),
+                  SizedBox(width: 6),
+                  Text(
+                    'Notes:',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      color: Colors.orange.shade800,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8),
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(12),
+                margin: EdgeInsets.only(top: 4),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: Colors.orange.shade300),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  '${foundInteraction.note}',
+                  style: TextStyle(fontSize: 14, color: Colors.black87),
+                ),
+              ),
+            ],
+          ),
+        ),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child:
+                  Icon(Icons.warning, color: Colors.orange.shade800, size: 60),
+            ),
+            SizedBox(height: 12),
+            Center(
+              child: Text(
+                'DANGEROUS INTERACTION',
+                style: TextStyle(
+                  color: Colors.orange.shade900,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1.2,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton.icon(
+            onPressed: () {
+              context.read<OrdersBloc>().add(DeleteOrderEvent(index: indx));
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Order deleted!')),
+              );
+              // TODO: Delete action
+              Navigator.of(context).pop();
+            },
+            icon: Icon(Icons.delete_forever, color: Colors.red),
+            label: Text('Delete',
+                style:
+                    TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+          ),
+          ElevatedButton.icon(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green.shade700,
+              foregroundColor: Colors.white,
+              elevation: 2,
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            ),
+            icon: Icon(Icons.check_circle),
+            label: Text('Continue'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+drugInteraction? checkOrder(
+    List<drugInteraction> drugInteractions, List<inventoryItem> items) {
+  for (var interaction in drugInteractions) {
+    for (int i = 0; i < items.length; i++) {
+      for (int j = i + 1; j < items.length; j++) {
+        final id1 = items[i].medication.id;
+        final id2 = items[j].medication.id;
+
+        print("id1 $id1 , id2 $id2 , interaction ${interaction.toString()}");
+        if ((interaction.medication1.id == id1 ||
+                interaction.medication1.id == id2) &&
+            (interaction.medication2.id == id1 ||
+                interaction.medication2.id == id2)) {
+          //Interaction Found!
+          developer.log("Found an interaction $interaction",
+              name: 'Interaction Checker');
+          return interaction;
+        }
+      }
+    }
+  }
+
+  return null;
 }
 
 Widget PendingOrdersScreenBody(
